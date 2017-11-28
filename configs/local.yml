@@ -1,0 +1,3 @@
+swagger:
+  resourcePackage: resources
+  title: 'Game'
