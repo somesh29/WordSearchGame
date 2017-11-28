@@ -10,7 +10,7 @@ import javax.inject.Singleton;
 import java.io.IOException;
 import java.sql.*;
 
-@Singleton
+
 @Slf4j
 public class GamePlayDao {
 
@@ -23,18 +23,23 @@ public class GamePlayDao {
         try {
             stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM game_play WHERE game_id= '" + gameId +"'");
+
             if(rs.next()) {
                 return getGamePlayObject(rs);
+            } else {
+                return null;
             }
-
         } catch (Exception e) {
+
+            log.error("game play not availaible");
             e.printStackTrace();
+            return null;
         }
-        return null;
     }
 
     private GamePlay getGamePlayObject(ResultSet rs) throws SQLException, IOException {
 
+        log.info("in function get game play object");
         return GamePlay.builder()
                 .gameId(rs.getString("game_id"))
                 .id(rs.getLong("id"))
@@ -47,7 +52,7 @@ public class GamePlayDao {
     public  void insertGamePlay(GamePlay gamePlay)  {
 
         try {
-            String query = "INSERT INTO GAME_PLAY(game_id, last_played_user, grid_info) values('" +
+            String query = "INSERT INTO game_play(game_id, last_played_user, grid_info) values('" +
                     gamePlay.getGameId() + "' , '" +
                     gamePlay.getLastPlayedUser() + "' , '" +
                     mapper.writeValueAsString(gamePlay.getGridInfo()) + "')";
@@ -63,7 +68,7 @@ public class GamePlayDao {
 
         try {
 
-            String query = "UPDATE GAME_PLAY SET game_id= '" + gamePlay.getGameId() + "' ," +
+            String query = "UPDATE game_play SET game_id= '" + gamePlay.getGameId() + "' ," +
                     " last_played_user ='" + gamePlay.getLastPlayedUser() + "', grid_info= '" +
                     mapper.writeValueAsString(gamePlay.getGridInfo())+ "' " +
                      " where game_id='" + gamePlay.getGameId() +"'";

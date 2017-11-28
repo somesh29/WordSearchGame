@@ -8,6 +8,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import models.Cell;
 
+/**
+ * entity for capturning moves of players
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

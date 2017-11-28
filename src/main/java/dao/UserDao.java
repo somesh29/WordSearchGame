@@ -13,7 +13,6 @@ import javax.inject.Singleton;
 import java.sql.*;
 
 @Slf4j
-@Singleton
 public class UserDao {
 
     private Connection connection = MySqlConnector.getConnection();
@@ -70,7 +69,7 @@ public class UserDao {
     public void insertUser(User user) {
 
         try {
-            String query = "INSERT INTO USERS(game_id, user_id, nick, is_admin) values('" +
+            String query = "INSERT INTO users(game_id, user_id, nick, is_admin) values('" +
                     user.getGameId() + "' , '" + user.getUserId() + "' , '" + user.getNick() + "' , '"
                     + user.getIsAdmin() + "')";
             PreparedStatement preparedStmt = connection.prepareStatement(query);
@@ -97,7 +96,7 @@ public class UserDao {
     public void updateUserScore(String userId, int score) {
         try {
 
-            String query = "UPDATE USERS SET score= " + score + " where user_id='" + userId +"'";
+            String query = "UPDATE users SET score= " + score + " where user_id='" + userId +"'";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.executeUpdate();
 

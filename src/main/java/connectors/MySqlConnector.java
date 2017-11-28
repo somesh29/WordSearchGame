@@ -6,6 +6,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ *
+ * This class returns java mysql connector for DAOs
+ * @author somesh.maurya
+ */
 public class MySqlConnector {
 
 

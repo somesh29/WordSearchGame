@@ -6,6 +6,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ *
+ * Entity for game info object
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

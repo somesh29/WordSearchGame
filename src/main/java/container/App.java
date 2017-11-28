@@ -12,6 +12,11 @@ import io.federecio.dropwizard.swagger.SwaggerBundle;
 import io.federecio.dropwizard.swagger.SwaggerBundleConfiguration;
 import resources.GameResource;
 
+/**
+ *
+ * Application class to run the applicataion
+ * @author somesh.maurya
+ */
 public class App extends Application<AppConfig> {
 
     @Override

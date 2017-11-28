@@ -10,14 +10,22 @@ import javax.inject.Singleton;
 import java.sql.*;
 
 
-@Singleton
+/**
+ *
+ * Dao class for game objects
+ */
 @Slf4j
 public class GameDao {
 
     private static Connection connection = MySqlConnector.getConnection();
     private static ObjectMapper mapper = new ObjectMapper();
 
-
+    /**
+     *
+     * Getting the game object
+     * @param gameId
+     * @return
+     */
     public Game getGame(String gameId) {
 
        Statement stmt = null;
@@ -43,10 +51,15 @@ public class GameDao {
        return null;
     }
 
+    /**
+     *
+     * creating a new game
+     * @param game
+     */
     public void createGame(Game game)  {
 
         try {
-            String query = "INSERT INTO GAMES(game_id, admin_user_id, state, info, max_players) values('" +
+            String query = "INSERT INTO games(game_id, admin_user_id, state, info, max_players) values('" +
                     game.getGameId() + "' , '" + game.getAdminUserId() + "' , '" + game.getState()
                     + "' , '" + mapper.writeValueAsString(game.getInfo()) + "', " + game.getMaxPlayers() + ")";
             PreparedStatement preparedStmt = connection.prepareStatement(query);
@@ -61,7 +74,7 @@ public class GameDao {
 
         try {
 
-            String query = "UPDATE GAMES SET admin_user_id= '" + game.getAdminUserId() + "' ," +
+            String query = "UPDATE games SET admin_user_id= '" + game.getAdminUserId() + "' ," +
                     " state ='" + game.getState()+ "', info= '" + mapper.writeValueAsString(game.getInfo())+ "' " +
                     " , max_players= " + game.getMaxPlayers()  +" where game_id='" + game.getGameId() +"'";
             PreparedStatement preparedStatement = connection.prepareStatement(query);

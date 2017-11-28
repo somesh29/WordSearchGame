@@ -6,6 +6,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
+/**
+ *
+ * Entity for starting new object
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

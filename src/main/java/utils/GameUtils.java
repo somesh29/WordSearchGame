@@ -6,6 +6,7 @@ import enitities.User;
 import enums.GameState;
 import responses.InfoResponse;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class GameUtils {
@@ -17,13 +18,23 @@ public class GameUtils {
     public static InfoResponse getInfo(Game game, User user, GamePlay gamePlay) {
         List<String> turnSqeuence = game.getInfo().getTurnSequence(user.getNick());
 
-        return InfoResponse.builder()
-                .gameState(GameState.valueOf(game.getState()))
-                .turnSequence(turnSqeuence)
-                .currentPlayer(turnSqeuence.get(0))
-                .grid(gamePlay.getGridInfo().getGrid())
-                .scores(game.getInfo().getScores())
-                .foundWords(gamePlay.getGridInfo().getFoundWords())
-                .build();
+        if(gamePlay!=null) {
+
+            return InfoResponse.builder()
+                    .gameState(GameState.valueOf(game.getState()))
+                    .turnSequence(turnSqeuence)
+                    .currentPlayer(turnSqeuence.get(0))
+                    .grid(gamePlay.getGridInfo().getGrid())
+                    .scores(game.getInfo().getScores())
+                    .foundWords(gamePlay.getGridInfo().getFoundWords())
+                    .build();
+        } else {
+            return InfoResponse.builder()
+                    .gameState(GameState.valueOf(game.getState()))
+                    .turnSequence(turnSqeuence)
+                    .currentPlayer(turnSqeuence.get(0))
+                    .scores(game.getInfo().getScores())
+                    .build();
+        }
     }
 }

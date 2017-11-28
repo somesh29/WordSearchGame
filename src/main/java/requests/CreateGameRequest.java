@@ -6,6 +6,11 @@ import lombok.Setter;
 
 import javax.validation.constraints.Min;
 
+/**
+ *
+ * Entity for new game request api
+ */
+
 @Data
 @Getter
 @Setter

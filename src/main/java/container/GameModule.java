@@ -7,6 +7,11 @@ import services.PlayService;
 import services.impl.GameServiceImpl;
 import services.impl.PlayServiceImpl;
 
+
+/**
+ *
+ * Module class for bindins across dropwizard
+ */
 public class GameModule extends AbstractModule {
 
     private AppConfig configuration;
