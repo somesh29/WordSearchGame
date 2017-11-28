@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import utils.Constants;
 
 import javax.inject.Singleton;
 import java.io.*;
@@ -13,25 +14,34 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
-
+/**
+ *
+ * helper class to check for variours edge cases of game
+ */
 @Slf4j
 @Singleton
 @Data
 public class GridHelper {
 
-    private static String dictFilePath = "/usr/share/dict/words";
+    private static String dictFilePath = "en";
     private static  List<String> directions = Arrays.asList("east","southEast", "south");
-    private static int gridSize = 15;
     private static int maxWordSize = 7;
 
     public GridHelper() {
 
     }
 
+    /**
+     *
+     * utility fuction to get a random grid at game start
+     * @return
+     */
     public static Character[][] getNewGrid() {
 
-        Character[][] grid = new Character[gridSize][gridSize];
-        List<String> wordList = getWordList().stream().filter(each -> each.length() <= 7).collect(Collectors.toList());
+        Character[][] grid = new Character[Constants.girdSize][Constants.girdSize];
+
+        // For simplicity of game word size is being kept as 7 as for 15*15 grid it's okay
+        List<String> wordList = getWordList().stream().filter(each -> each.length() <= maxWordSize).collect(Collectors.toList());
         int i=0;
         boolean curWordInserted = false;
         while(i<=10) {
@@ -41,22 +51,24 @@ public class GridHelper {
             int randomNum = ThreadLocalRandom.current().nextInt(0, wordList.size());
             String word = wordList.get(randomNum);
             word = word.toUpperCase();
-            randomX = ThreadLocalRandom.current().nextInt(0, gridSize);
-            randomY = ThreadLocalRandom.current().nextInt(0, gridSize);
+            randomX = ThreadLocalRandom.current().nextInt(0, Constants.girdSize);
+            randomY = ThreadLocalRandom.current().nextInt(0, Constants.girdSize);
             while(retryword <=3 ) {
                 if(word.length() <=maxWordSize)
                     break;
                 randomNum = ThreadLocalRandom.current().nextInt(0, wordList.size());
                 word = wordList.get(randomNum);
                 word = word.toUpperCase();
-                randomX = ThreadLocalRandom.current().nextInt(0, gridSize);
-                randomY = ThreadLocalRandom.current().nextInt(0, gridSize);
+                randomX = ThreadLocalRandom.current().nextInt(0, Constants.girdSize);
+                randomY = ThreadLocalRandom.current().nextInt(0, Constants.girdSize);
                 retryword++;
             }
 
             int retryCount=1;
             while(retryCount <=3) {
                 int randomDirection = ThreadLocalRandom.current().nextInt(0, directions.size());
+
+                //0-> for inserting word in east 1-> inserting word in south east 2-> inserting word in south
                 if (randomDirection == 0) {
 
                     if (insertEast(word, grid, randomX, randomY)) {
@@ -78,9 +90,10 @@ public class GridHelper {
             }
         }
 
-        for(i = 0; i<15; i++) {
+        // if grid node is empty fill it with random alphabets
+        for(i = 0; i<Constants.girdSize; i++) {
            System.out.println();
-           for(int j=0;j<15;j++) {
+           for(int j=0;j<Constants.girdSize;j++) {
                if(grid[i][j]==null) {
                    grid[i][j] = (char)ThreadLocalRandom.current().nextInt(65, 90);
                    //System.out.print(grid[i][j] + " ");
@@ -92,8 +105,10 @@ public class GridHelper {
         return grid;
      }
 
-
-
+    /**
+     * get all words from dictionary
+     * @return
+     */
      public static List<String> getWordList() {
 
          List<String> wordList = new ArrayList<String>();
@@ -111,14 +126,27 @@ public class GridHelper {
          return null;
      }
 
-
+    /**
+     * check valid co-ordinates
+     * @param x
+     * @param y
+     * @return
+     */
     private static boolean checkValid(int x, int y) {
 
-        if(x>=0 && x<gridSize && y>=0 && y<gridSize)
+        if(x>=0 && x<Constants.girdSize && y>=0 && y<Constants.girdSize)
             return true;
         return false;
     }
 
+    /**
+     * insert word in south-east
+     * @param word
+     * @param grid
+     * @param x
+     * @param y
+     * @return
+     */
     private static boolean insertSouthEast(String word, Character[][] grid, int x, int y) {
 
         int si = x;
@@ -149,6 +177,14 @@ public class GridHelper {
         return false;
     }
 
+    /**
+     * insert word in south
+     * @param word
+     * @param grid
+     * @param x
+     * @param y
+     * @return
+     */
     private static boolean insertSouth(String word, Character[][] grid, int x, int y) {
 
         int si = x;
@@ -177,6 +213,14 @@ public class GridHelper {
         return false;
     }
 
+    /**
+     * insert word in east
+     * @param word
+     * @param grid
+     * @param x
+     * @param y
+     * @return
+     */
     private static boolean insertEast(String word, Character[][] grid, int x, int y) {
 
         int si = x;
@@ -205,11 +249,16 @@ public class GridHelper {
         return false;
     }
 
+    /**
+     * for serializing grid
+     * @param c
+     * @return
+     */
     public static String getGridAsString(Character[][] c) {
         String s = "";
         int i, j;
-        for(i=0;i<15;i++) {
-            for(j=0;j<15;j++) {
+        for(i=0;i<Constants.girdSize;i++) {
+            for(j=0;j<Constants.girdSize;j++) {
                 s = s + c[i][j] + ", ";
             }
             s = s + "#";
@@ -217,13 +266,18 @@ public class GridHelper {
         return s;
     }
 
+    /**
+     * for deserializing grid
+     * @param s
+     * @return
+     */
     public static Character[][] getGrid(String s) {
         String[] rows = s.split("#");
-        Character[][] grid = new Character[15][15];
+        Character[][] grid = new Character[Constants.girdSize][Constants.girdSize];
         int i, j;
-        for(i=0;i<15;i++) {
+        for(i=0;i<Constants.girdSize;i++) {
             String[] row = rows[i].split(", ");
-            for(j=0;j<15;j++) {
+            for(j=0;j<Constants.girdSize;j++) {
                 grid[i][j] = row[j].charAt(0);
             }
         }
